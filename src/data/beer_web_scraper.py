@@ -263,7 +263,8 @@ def create_beer_rating_dataframe(beer_df, session, test_count=None):
         response = session.post(review_url, data={'hideRatings': 'N'})
 
         while review_item < total_review_items:
-
+            if review_item % 100 == 0:
+                print(review_item)
             review_url = 'https://www.beeradvocate.com/beer/profile/' + beer_row['brewery_id'] + '/' + beer_row[
                 'beer_id'] + '/' + '?view=beer&sort=&start=' + str(review_item)
             response = session.get(review_url)
@@ -290,7 +291,6 @@ def create_beer_rating_dataframe(beer_df, session, test_count=None):
             final_beer_rating_list = final_beer_rating_list + temp_beer_rating_list
 
             review_item += 25
-            break
     return pd.DataFrame(final_beer_rating_list).set_index('beer_rating_id')
 
 

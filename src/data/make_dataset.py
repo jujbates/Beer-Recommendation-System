@@ -36,7 +36,7 @@ def main(input_filepath, output_filepath):
         }
 
     session = start_ba_session(data)
-    beer_styles_dict_path = input_filepath + '/' + 'beer_styles_dict.json'
+    beer_styles_dict_path = input_filepath + '/' + 'beer_styles_dict_test.json'
     beer_style_dict = get_beer_style_dict_from_json(beer_styles_dict_path)
     for beer_style, beer_sub_style_dict in beer_style_dict.items():
         for beer_sub_style, style_id in beer_sub_style_dict.items():
@@ -46,11 +46,14 @@ def main(input_filepath, output_filepath):
             beer_sub_style_ = beer_sub_style_.replace(' - ', '_').replace(' *', '').replace('/', '').replace(' ', '_')
             style_id_ = str(style_id)
             style_path = beer_style_ + '/' + beer_sub_style_ + '_' + style_id_ + '.csv'
-            beer_df.to_csv('s3://beer-recommendation-system-data/beer_data/beer_temp/' + style_path)
+            print(beer_style_ + '/' + beer_sub_style_ + '_' + style_id_)
+            beer_df.to_csv('s3://beer-recommendation-system/data/raw/beer_data/beer_temp/' + style_path)
             beer_meta_df = create_beer_meta_dataframe(beer_df, session)
-            beer_meta_df.to_csv('s3://beer-recommendation-system-data/beer_data/beer_meta/' + style_path)
+            beer_meta_df.to_csv('s3://beer-recommendation-system/data/raw/beer_data/beer_meta/' + style_path)
             beer_rating_df = create_beer_rating_dataframe(beer_df, session)
-            beer_rating_df.to_csv('s3://beer-recommendation-system-data/beer_data/beer_rating/' + style_path)
+            print(beer_rating_df)
+
+            beer_rating_df.to_csv('s3://beer-recommendation-system/data/raw/beer_data/beer_rating/' + style_path)
 
 
 if __name__ == '__main__':
